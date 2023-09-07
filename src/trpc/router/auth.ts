@@ -1,5 +1,6 @@
 import { TextEncoder } from 'util';
 import { cookies } from 'next/headers';
+import { publicProcedure, router } from '@/trpc';
 import type { JWTPayload } from '@/types';
 import { hash, verify } from 'argon2';
 import { eq } from 'drizzle-orm';
@@ -7,7 +8,6 @@ import { SignJWT } from 'jose';
 
 import { env } from '@/env.mjs';
 import { users } from '@/db/schema';
-import { publicProcedure, router } from '@/server/trpc';
 import { signinSchema, signupSchema } from '@/lib/validations/auth';
 
 export const authRouter = router({

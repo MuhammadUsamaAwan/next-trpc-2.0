@@ -1,4 +1,4 @@
-import { publicProcedure, router } from '@/server/trpc';
+import { publicProcedure, router } from '@/trpc';
 import { eq } from 'drizzle-orm';
 import z from 'zod';
 
