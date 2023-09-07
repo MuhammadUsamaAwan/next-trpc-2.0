@@ -1,13 +1,13 @@
 import { TextEncoder } from 'util';
 import { cookies } from 'next/headers';
-import { publicProcedure, router } from '@/server/trpc';
-import type { Claims } from '@/types';
+import type { JWTPayload } from '@/types';
 import { hash, verify } from 'argon2';
 import { eq } from 'drizzle-orm';
 import { SignJWT } from 'jose';
 
 import { env } from '@/env.mjs';
 import { users } from '@/db/schema';
+import { publicProcedure, router } from '@/server/trpc';
 import { loginSchema, signupSchema } from '@/lib/validations/auth';
 
 export const todosRouter = router({
@@ -33,8 +33,8 @@ export const todosRouter = router({
   }),
 });
 
-async function generateAccessToken(claims: Claims) {
-  const token = await new SignJWT(claims)
+async function generateAccessToken(jwtPayload: JWTPayload) {
+  const token = await new SignJWT(jwtPayload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime(env.JWT_EXPIRES_IN)

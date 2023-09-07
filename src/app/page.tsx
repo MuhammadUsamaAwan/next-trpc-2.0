@@ -1,5 +1,4 @@
 import { trpc } from '@/trpc/serverClient';
-
 import { AddTodoForm } from '@/components/forms/add-todo-form';
 import { TodoList } from '@/components/todo-list';
 

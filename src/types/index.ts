@@ -1,4 +1,4 @@
-export type Claims = {
+export type JWTPayload = {
   id: string;
   email: string;
 };

@@ -2,7 +2,6 @@
 
 import { trpc } from '@/trpc/client';
 import { type TRPCClient } from '@/trpc/serverClient';
-
 import { Checkbox } from '@/components/ui/checkbox';
 
 type TodoListProps = {

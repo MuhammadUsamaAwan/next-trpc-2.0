@@ -4,8 +4,8 @@ import { siteConfig } from '@/config/site';
 import '@/styles/globals.css';
 
 import type { Metadata } from 'next';
-import { TRPCProvider } from '@/trpc/provider';
 
+import { TRPCProvider } from '@/trpc/provider';
 import { fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider';

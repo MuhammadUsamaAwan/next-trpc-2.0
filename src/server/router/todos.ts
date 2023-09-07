@@ -1,8 +1,8 @@
-import { publicProcedure, router } from '@/server/trpc';
 import { eq } from 'drizzle-orm';
 import z from 'zod';
 
 import { todos } from '@/db/schema';
+import { publicProcedure, router } from '@/server/trpc';
 import { addTodoSchema } from '@/lib/validations/todos';
 
 export const todosRouter = router({
