@@ -5,6 +5,7 @@ import type { JWTPayload } from '@/types';
 import { hash, verify } from 'argon2';
 import { eq } from 'drizzle-orm';
 import { SignJWT } from 'jose';
+import ms from 'ms';
 
 import { env } from '@/env.mjs';
 import { users } from '@/db/schema';
@@ -42,6 +43,6 @@ async function setAccessToken(jwtPayload: JWTPayload) {
     secure: true,
     httpOnly: true,
     sameSite: 'strict',
-    expires: Date.now() - Number(env.JWT_EXPIRES_IN),
+    maxAge: ms(env.JWT_EXPIRES_IN) / 1000,
   });
 }
