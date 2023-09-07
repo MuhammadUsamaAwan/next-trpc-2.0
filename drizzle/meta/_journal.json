@@ -1,0 +1,13 @@
+{
+  "version": "5",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1694074691658,
+      "tag": "0000_material_excalibur",
+      "breakpoints": true
+    }
+  ]
+}
