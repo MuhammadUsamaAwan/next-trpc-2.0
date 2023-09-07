@@ -11,11 +11,11 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Input } from '@/components/ui/input';
 
 export function AddTodoForm() {
-  const utils = trpc.useContext();
+  const ctx = trpc.useContext();
   const { mutate } = trpc.todos.addTodo.useMutation({
     onSuccess(newTodo) {
       if (newTodo) {
-        utils.todos.getTodos.setData(undefined, data => [...(data ?? []), newTodo]);
+        ctx.todos.getTodos.setData(undefined, data => [...(data ?? []), newTodo]);
       }
     },
   });

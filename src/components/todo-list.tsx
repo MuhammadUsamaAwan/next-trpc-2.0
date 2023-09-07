@@ -9,22 +9,22 @@ type TodoListProps = {
 };
 
 export function TodoList({ todos }: TodoListProps) {
-  const utils = trpc.useContext();
+  const ctx = trpc.useContext();
   const { data } = trpc.todos.getTodos.useQuery(undefined, {
     initialData: todos,
   });
 
   const { mutate } = trpc.todos.toggleCompleted.useMutation({
     onMutate: updatedTodo => {
-      const previousTodos = utils.todos.getTodos.getData();
-      utils.todos.getTodos.setData(
+      const previousTodos = ctx.todos.getTodos.getData();
+      ctx.todos.getTodos.setData(
         undefined,
         data => data?.map(todo => (todo.id === updatedTodo.id ? { ...todo, ...updatedTodo } : todo))
       );
       return { previousTodos };
     },
     onError: (_, __, context) => {
-      utils.todos.getTodos.setData(undefined, context?.previousTodos);
+      ctx.todos.getTodos.setData(undefined, context?.previousTodos);
     },
   });
 
