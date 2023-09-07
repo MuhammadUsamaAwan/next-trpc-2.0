@@ -11,7 +11,14 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Input } from '@/components/ui/input';
 
 export function AddTodoForm() {
-  const { mutate } = trpc.todo.addTodo.useMutation();
+  const utils = trpc.useContext();
+  const { mutate } = trpc.todo.addTodo.useMutation({
+    onSuccess(newTodo) {
+      if (newTodo) {
+        utils.todo.getTodos.setData(undefined, data => [...(data ?? []), newTodo]);
+      }
+    },
+  });
 
   const form = useForm<z.infer<typeof addTodoSchema>>({
     resolver: zodResolver(addTodoSchema),

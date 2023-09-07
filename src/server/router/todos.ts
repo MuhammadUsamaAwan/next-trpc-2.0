@@ -11,7 +11,8 @@ export const todosRouter = router({
     return allTodos;
   }),
   addTodo: publicProcedure.input(addTodoSchema).mutation(async ({ ctx: { db }, input: { task } }) => {
-    return await db.insert(todos).values({ task }).returning();
+    const newtodo = await db.insert(todos).values({ task }).returning();
+    return newtodo[0];
   }),
   toggleCompleted: publicProcedure
     .input(z.object({ id: z.string(), isCompleted: z.boolean() }))

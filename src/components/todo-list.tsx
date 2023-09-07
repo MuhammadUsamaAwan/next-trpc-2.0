@@ -10,10 +10,24 @@ type TodoListProps = {
 };
 
 export function TodoList({ todos }: TodoListProps) {
+  const utils = trpc.useContext();
   const { data } = trpc.todo.getTodos.useQuery(undefined, {
     initialData: todos,
   });
-  const { mutate } = trpc.todo.toggleCompleted.useMutation();
+
+  const { mutate } = trpc.todo.toggleCompleted.useMutation({
+    onMutate: updatedTodo => {
+      const previousTodos = utils.todo.getTodos.getData();
+      utils.todo.getTodos.setData(
+        undefined,
+        data => data?.map(todo => (todo.id === updatedTodo.id ? { ...todo, ...updatedTodo } : todo))
+      );
+      return { previousTodos };
+    },
+    onError: (_, __, context) => {
+      utils.todo.getTodos.setData(undefined, context?.previousTodos);
+    },
+  });
 
   return (
     <ul className='space-y-3'>
