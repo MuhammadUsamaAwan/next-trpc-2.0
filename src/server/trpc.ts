@@ -1,12 +1,13 @@
 import { cookies } from 'next/headers';
 import { initTRPC, TRPCError } from '@trpc/server';
-import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 
 import { db } from '@/db';
 import { verifyJWT } from '@/lib/utils';
 
-export const createContext = async (_: FetchCreateContextFnOptions) => {
-  const user = await verifyJWT(cookies().get('token')?.value);
+export const createContext = async () => createCtx(cookies().get('token')?.value);
+
+export const createCtx = async (token: string | undefined) => {
+  const user = await verifyJWT(token);
   return {
     db,
     user,

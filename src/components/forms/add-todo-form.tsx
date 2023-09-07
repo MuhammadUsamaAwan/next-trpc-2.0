@@ -12,10 +12,10 @@ import { Input } from '@/components/ui/input';
 
 export function AddTodoForm() {
   const utils = trpc.useContext();
-  const { mutate } = trpc.todo.addTodo.useMutation({
+  const { mutate } = trpc.todos.addTodo.useMutation({
     onSuccess(newTodo) {
       if (newTodo) {
-        utils.todo.getTodos.setData(undefined, data => [...(data ?? []), newTodo]);
+        utils.todos.getTodos.setData(undefined, data => [...(data ?? []), newTodo]);
       }
     },
   });

@@ -3,7 +3,7 @@ import { AddTodoForm } from '@/components/forms/add-todo-form';
 import { TodoList } from '@/components/todo-list';
 
 export default async function Home() {
-  const todos = await trpc.todo.getTodos();
+  const todos = await trpc.todos.getTodos();
 
   return (
     <div className='mx-auto max-w-xl py-20'>

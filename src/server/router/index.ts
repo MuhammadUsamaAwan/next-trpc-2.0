@@ -2,7 +2,7 @@ import { todosRouter } from '@/server/router/todos';
 import { router } from '@/server/trpc';
 
 export const appRouter = router({
-  todo: todosRouter,
+  todos: todosRouter,
 });
 
 export type AppRouter = typeof appRouter;

@@ -5,26 +5,26 @@ import { type TRPCClient } from '@/trpc/serverClient';
 import { Checkbox } from '@/components/ui/checkbox';
 
 type TodoListProps = {
-  todos: Awaited<ReturnType<TRPCClient['todo']['getTodos']>>;
+  todos: Awaited<ReturnType<TRPCClient['todos']['getTodos']>>;
 };
 
 export function TodoList({ todos }: TodoListProps) {
   const utils = trpc.useContext();
-  const { data } = trpc.todo.getTodos.useQuery(undefined, {
+  const { data } = trpc.todos.getTodos.useQuery(undefined, {
     initialData: todos,
   });
 
-  const { mutate } = trpc.todo.toggleCompleted.useMutation({
+  const { mutate } = trpc.todos.toggleCompleted.useMutation({
     onMutate: updatedTodo => {
-      const previousTodos = utils.todo.getTodos.getData();
-      utils.todo.getTodos.setData(
+      const previousTodos = utils.todos.getTodos.getData();
+      utils.todos.getTodos.setData(
         undefined,
         data => data?.map(todo => (todo.id === updatedTodo.id ? { ...todo, ...updatedTodo } : todo))
       );
       return { previousTodos };
     },
     onError: (_, __, context) => {
-      utils.todo.getTodos.setData(undefined, context?.previousTodos);
+      utils.todos.getTodos.setData(undefined, context?.previousTodos);
     },
   });
 
