@@ -8,17 +8,17 @@ import { SignJWT } from 'jose';
 import { env } from '@/env.mjs';
 import { users } from '@/db/schema';
 import { publicProcedure, router } from '@/server/trpc';
-import { loginSchema, signupSchema } from '@/lib/validations/auth';
+import { signinSchema, signupSchema } from '@/lib/validations/auth';
 
-export const todosRouter = router({
-  signup: publicProcedure.input(signupSchema).query(async ({ ctx: { db }, input: { email, password } }) => {
+export const authRouter = router({
+  signUp: publicProcedure.input(signupSchema).mutation(async ({ ctx: { db }, input: { email, password } }) => {
     const hashedPassword = await hash(password);
     const [user] = await db.insert(users).values({ email, password: hashedPassword }).returning({ id: users.id });
     if (!user) throw new Error();
     await setAccessToken({ id: user.id, email });
     return true;
   }),
-  login: publicProcedure.input(loginSchema).query(async ({ ctx: { db }, input: { email, password } }) => {
+  signIn: publicProcedure.input(signinSchema).mutation(async ({ ctx: { db }, input: { email, password } }) => {
     const [user] = await db
       .select({ id: users.id, password: users.password })
       .from(users)
@@ -42,6 +42,6 @@ async function setAccessToken(jwtPayload: JWTPayload) {
     secure: true,
     httpOnly: true,
     sameSite: 'strict',
-    expires: Number(env.COOKIES_EXPIRES),
+    expires: Date.now() - Number(env.JWT_EXPIRES_IN),
   });
 }

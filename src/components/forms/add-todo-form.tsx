@@ -21,6 +21,7 @@ export function AddTodoForm() {
   });
 
   const form = useForm<z.infer<typeof addTodoSchema>>({
+    // @ts-expect-error TODO check this later
     resolver: zodResolver(addTodoSchema),
     defaultValues: {
       task: '',
