@@ -1,9 +1,10 @@
+import { TextEncoder } from 'util';
 import { cookies } from 'next/headers';
 import { publicProcedure, router } from '@/server/trpc';
 import type { Claims } from '@/types';
 import { hash, verify } from 'argon2';
 import { eq } from 'drizzle-orm';
-import { sign } from 'jsonwebtoken';
+import { SignJWT } from 'jose';
 
 import { env } from '@/env.mjs';
 import { users } from '@/db/schema';
@@ -14,7 +15,7 @@ export const todosRouter = router({
     const hashedPassword = await hash(password);
     const [user] = await db.insert(users).values({ email, password: hashedPassword }).returning({ id: users.id });
     if (!user) throw new Error();
-    const accessToken = generateAccessToken({ id: user.id, email });
+    const accessToken = await generateAccessToken({ id: user.id, email });
     cookies().set('token', accessToken, { secure: true, httpOnly: true, sameSite: 'strict' });
     return true;
   }),
@@ -26,15 +27,17 @@ export const todosRouter = router({
     if (!user) throw new Error();
     const isPasswordCorrect = await verify(user.password, password);
     if (!isPasswordCorrect) throw new Error();
-    const accessToken = generateAccessToken({ id: user.id, email });
+    const accessToken = await generateAccessToken({ id: user.id, email });
     cookies().set('token', accessToken, { secure: true, httpOnly: true, sameSite: 'strict' });
     return true;
   }),
 });
 
-export function generateAccessToken(claims: Claims) {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-  return sign(claims, env.JWT_SECRET, {
-    expiresIn: env.JWT_EXPIRES_IN,
-  }) as string;
+async function generateAccessToken(claims: Claims) {
+  const token = await new SignJWT(claims)
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime(env.JWT_EXPIRES_IN)
+    .sign(new TextEncoder().encode(env.JWT_SECRET));
+  return token;
 }
