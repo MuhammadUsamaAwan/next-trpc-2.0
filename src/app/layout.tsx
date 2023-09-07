@@ -4,6 +4,7 @@ import { siteConfig } from '@/config/site';
 import '@/styles/globals.css';
 
 import type { Metadata } from 'next';
+import { TRPCProvider } from '@/trpc/provider';
 
 import { fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
@@ -27,7 +28,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang='en' suppressHydrationWarning>
       <body className={cn('min-h-screen font-sans antialiased', fontSans.variable)}>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-          {children}
+          <TRPCProvider>{children}</TRPCProvider>
         </ThemeProvider>
       </body>
     </html>
