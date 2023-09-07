@@ -1,6 +1,5 @@
 import { TextEncoder } from 'util';
 import { cookies } from 'next/headers';
-import { publicProcedure, router } from '@/server/trpc';
 import type { JWTPayload } from '@/types';
 import { hash, verify } from 'argon2';
 import { eq } from 'drizzle-orm';
@@ -8,6 +7,7 @@ import { SignJWT } from 'jose';
 
 import { env } from '@/env.mjs';
 import { users } from '@/db/schema';
+import { publicProcedure, router } from '@/server/trpc';
 import { loginSchema, signupSchema } from '@/lib/validations/auth';
 
 export const todosRouter = router({
@@ -15,8 +15,7 @@ export const todosRouter = router({
     const hashedPassword = await hash(password);
     const [user] = await db.insert(users).values({ email, password: hashedPassword }).returning({ id: users.id });
     if (!user) throw new Error();
-    const accessToken = await generateAccessToken({ id: user.id, email });
-    cookies().set('token', accessToken, { secure: true, httpOnly: true, sameSite: 'strict' });
+    await setAccessToken({ id: user.id, email });
     return true;
   }),
   login: publicProcedure.input(loginSchema).query(async ({ ctx: { db }, input: { email, password } }) => {
@@ -27,17 +26,22 @@ export const todosRouter = router({
     if (!user) throw new Error();
     const isPasswordCorrect = await verify(user.password, password);
     if (!isPasswordCorrect) throw new Error();
-    const accessToken = await generateAccessToken({ id: user.id, email });
-    cookies().set('token', accessToken, { secure: true, httpOnly: true, sameSite: 'strict' });
+    await setAccessToken({ id: user.id, email });
     return true;
   }),
 });
 
-async function generateAccessToken(jwtPayload: JWTPayload) {
-  const token = await new SignJWT(jwtPayload)
+async function setAccessToken(jwtPayload: JWTPayload) {
+  const accessToken = await new SignJWT(jwtPayload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime(env.JWT_EXPIRES_IN)
     .sign(new TextEncoder().encode(env.JWT_SECRET));
-  return token;
+
+  cookies().set('token', accessToken, {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'strict',
+    expires: Number(env.COOKIES_EXPIRES),
+  });
 }
