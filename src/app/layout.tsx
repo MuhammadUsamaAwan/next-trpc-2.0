@@ -28,7 +28,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang='en' suppressHydrationWarning>
       <body className={cn('min-h-screen font-sans antialiased', fontSans.variable)}>
         <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-          <TRPCProvider>{children}</TRPCProvider>
+          <TRPCProvider>
+            <main>{children}</main>
+          </TRPCProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -1,10 +1,12 @@
+import { AddTodoForm } from '@/components/forms/add-todo-form';
+import { TodoList } from '@/components/todo-list';
+
 export default function Home() {
   return (
-    <div>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio perspiciatis eos voluptate fugiat dolore
-      similique, animi iusto, maiores earum dicta numquam rerum expedita, totam aliquam consectetur. Rem reiciendis
-      dolores, repudiandae obcaecati cum reprehenderit odit cumque vel error, sapiente dolore. Amet ex omnis corrupti
-      incidunt optio voluptatem minus, maiores perferendis similique?
+    <div className='mx-auto max-w-xl py-20'>
+      <h1 className='mb-4 text-3xl font-bold'>Todo List</h1>
+      <AddTodoForm />
+      <TodoList />
     </div>
   );
 }

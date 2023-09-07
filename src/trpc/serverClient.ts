@@ -1,3 +1,7 @@
 import { appRouter } from '@/server/router';
 
-export const trpc = appRouter.createCaller({});
+import { db } from '@/db';
+
+export const trpc = appRouter.createCaller({
+  db,
+});
