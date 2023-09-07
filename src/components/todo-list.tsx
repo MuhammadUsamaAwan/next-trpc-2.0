@@ -1,11 +1,18 @@
 'use client';
 
 import { trpc } from '@/trpc/client';
+import { type TRPCClient } from '@/trpc/serverClient';
 
 import { Checkbox } from '@/components/ui/checkbox';
 
-export function TodoList() {
-  const { data } = trpc.todo.getTodos.useQuery();
+type TodoListProps = {
+  todos: Awaited<ReturnType<TRPCClient['todo']['getTodos']>>;
+};
+
+export function TodoList({ todos }: TodoListProps) {
+  const { data } = trpc.todo.getTodos.useQuery(undefined, {
+    initialData: todos,
+  });
   const { mutate } = trpc.todo.toggleCompleted.useMutation();
 
   return (
