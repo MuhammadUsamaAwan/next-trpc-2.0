@@ -1,9 +1,8 @@
-import type { JWTPayload } from '@/types';
 import { clsx, type ClassValue } from 'clsx';
 import { jwtVerify } from 'jose';
 import { twMerge } from 'tailwind-merge';
-
 import { env } from '@/env.mjs';
+import type { JWTPayload } from '@/types';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

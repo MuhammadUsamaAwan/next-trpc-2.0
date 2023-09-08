@@ -1,15 +1,14 @@
 import { TextEncoder } from 'util';
 import { cookies } from 'next/headers';
-import { publicProcedure, router } from '@/trpc';
-import type { JWTPayload } from '@/types';
 import { hash, verify } from 'argon2';
 import { eq } from 'drizzle-orm';
 import { SignJWT } from 'jose';
 import ms from 'ms';
-
-import { env } from '@/env.mjs';
 import { users } from '@/db/schema';
+import { env } from '@/env.mjs';
 import { signinSchema, signupSchema } from '@/lib/validations/auth';
+import { publicProcedure, router } from '@/trpc';
+import type { JWTPayload } from '@/types';
 
 export const authRouter = router({
   signUp: publicProcedure.input(signupSchema).mutation(async ({ ctx: { db }, input: { email, password } }) => {

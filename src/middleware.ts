@@ -1,5 +1,4 @@
 import { NextResponse, type NextRequest } from 'next/server';
-
 import { verifyJWT } from '@/lib/utils';
 
 export async function middleware(request: NextRequest) {

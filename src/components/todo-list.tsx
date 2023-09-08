@@ -1,8 +1,8 @@
 'use client';
 
+import { Checkbox } from '@/components/ui/checkbox';
 import { trpc } from '@/trpc/client';
 import { type TRPCClient } from '@/trpc/serverClient';
-import { Checkbox } from '@/components/ui/checkbox';
 
 type TodoListProps = {
   todos: Awaited<ReturnType<TRPCClient['todos']['getTodos']>>;

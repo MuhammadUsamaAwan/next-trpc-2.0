@@ -1,8 +1,7 @@
 import { cookies } from 'next/headers';
-import { initTRPC, TRPCError } from '@trpc/server';
-
 import { db } from '@/db';
 import { verifyJWT } from '@/lib/utils';
+import { initTRPC, TRPCError } from '@trpc/server';
 
 export const createContext = async () => createCtx(cookies().get('token')?.value);
 

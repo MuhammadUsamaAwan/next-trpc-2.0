@@ -1,14 +1,13 @@
-import { env } from '@/env.mjs';
 import { siteConfig } from '@/config/site';
+import { env } from '@/env.mjs';
 
 import '@/styles/globals.css';
 
 import type { Metadata } from 'next';
-import { TRPCProvider } from '@/trpc/provider';
-
+import { ThemeProvider } from '@/components/theme-provider';
 import { fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
-import { ThemeProvider } from '@/components/theme-provider';
+import { TRPCProvider } from '@/trpc/provider';
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),

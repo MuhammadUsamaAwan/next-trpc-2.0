@@ -1,7 +1,7 @@
-import { trpc } from '@/trpc/serverClient';
-import { getUser } from '@/lib/server-utils';
 import { AddTodoForm } from '@/components/forms/add-todo-form';
 import { TodoList } from '@/components/todo-list';
+import { getUser } from '@/lib/server-utils';
+import { trpc } from '@/trpc/serverClient';
 
 export default async function Home() {
   const todos = await trpc.todos.getTodos();
